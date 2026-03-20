@@ -1,0 +1,108 @@
+/* 
+ * Autumn Color System
+ * 
+ * This file contains the complete color system for the project.
+ * Import this file when you need access to color utilities.
+ */
+
+/* Color Palette Reference */
+/*
+  Primary: Deep Autumn Brown (#4A2F27)
+  Accent: Burnt Orange (#C65D2E)
+  Background: Soft Cream (#F5EFE6)
+  Calm Accent: Sage Green (#8A9A5B)
+  Secondary BG: Warm Sand (#D8C3A5)
+*/
+
+/* Extended Color Utilities */
+.gradient-autumn {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+}
+
+.gradient-calm {
+  background: linear-gradient(135deg, var(--calm-accent) 0%, var(--secondary-bg) 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, var(--background) 0%, var(--secondary-bg) 100%);
+}
+
+/* Shadow utilities with autumn colors */
+.shadow-primary {
+  box-shadow: 0 4px 6px -1px rgba(74, 47, 39, 0.1), 0 2px 4px -1px rgba(74, 47, 39, 0.06);
+}
+
+.shadow-accent {
+  box-shadow: 0 4px 6px -1px rgba(198, 93, 46, 0.1), 0 2px 4px -1px rgba(198, 93, 46, 0.06);
+}
+
+.shadow-calm {
+  box-shadow: 0 4px 6px -1px rgba(138, 154, 91, 0.1), 0 2px 4px -1px rgba(138, 154, 91, 0.06);
+}
+
+/* Text color variations */
+.text-primary-light { color: rgba(74, 47, 39, 0.8); }
+.text-primary-lighter { color: rgba(74, 47, 39, 0.6); }
+.text-accent-light { color: rgba(198, 93, 46, 0.8); }
+.text-accent-lighter { color: rgba(198, 93, 46, 0.6); }
+
+/* Background color variations */
+.bg-primary-light { background-color: rgba(74, 47, 39, 0.1); }
+.bg-accent-light { background-color: rgba(198, 93, 46, 0.1); }
+.bg-calm-accent-light { background-color: rgba(138, 154, 91, 0.1); }
+
+/* Border utilities */
+.border-t-primary { border-top-color: var(--primary); }
+.border-r-primary { border-right-color: var(--primary); }
+.border-b-primary { border-bottom-color: var(--primary); }
+.border-l-primary { border-left-color: var(--primary); }
+
+.border-t-accent { border-top-color: var(--accent); }
+.border-r-accent { border-right-color: var(--accent); }
+.border-b-accent { border-bottom-color: var(--accent); }
+.border-l-accent { border-left-color: var(--accent); }
+
+/* Component-specific styles */
+.navbar-autumn {
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, var(--background) 0%, var(--secondary-bg) 100%);
+}
+
+.footer-autumn {
+  background-color: var(--primary);
+  color: var(--background);
+}
+
+/* Form elements */
+.input-autumn {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-autumn:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(198, 93, 46, 0.1);
+}
+
+.input-autumn::placeholder {
+  color: rgba(74, 47, 39, 0.5);
+}
+
+/* Status colors using the palette */
+.status-success { color: var(--calm-accent); }
+.status-warning { color: var(--accent); }
+.status-error { color: var(--primary); }
+
+.bg-status-success { background-color: rgba(138, 154, 91, 0.1); }
+.bg-status-warning { background-color: rgba(198, 93, 46, 0.1); }
+.bg-status-error { background-color: rgba(74, 47, 39, 0.1); }
