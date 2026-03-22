@@ -51,14 +51,20 @@
   --color-calm-accent-hover: var(--calm-accent-hover);
   
   /* Typography */
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-quicksand);
   --font-mono: var(--font-geist-mono);
+  --font-quicksand: var(--font-quicksand);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif;
+}
+
+/* Font utility classes */
+.font-quicksand {
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif;
 }
 
 /* Utility Classes for Easy Color Usage */
