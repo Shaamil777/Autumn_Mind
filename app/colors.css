@@ -1,5 +1,5 @@
 /* 
- * Autumn Color System
+ * Color System
  * 
  * This file contains the complete color system for the project.
  * Import this file when you need access to color utilities.
@@ -7,11 +7,15 @@
 
 /* Color Palette Reference */
 /*
-  Primary: Deep Autumn Brown (#4A2F27)
-  Accent: Burnt Orange (#C65D2E)
-  Background: Soft Cream (#F5EFE6)
-  Calm Accent: Sage Green (#8A9A5B)
-  Secondary BG: Warm Sand (#D8C3A5)
+  Primary: #1F1F1F (Text Primary / Dark)
+  Accent: #7A9E9F (Accent Primary / Teal)
+  Background: #FAF9F6 (Background Primary)
+  Calm Accent: #6A8E8F (Accent Hover / Darker Teal)
+  Secondary BG: #F1F1EF (Background Secondary)
+  Surface: #FFFFFF
+  Border: #E5E5E5
+  Highlight: #E8E1D9
+  Accent Light: #E6F0F0
 */
 
 /* Extended Color Utilities */
@@ -27,29 +31,29 @@
   background: linear-gradient(135deg, var(--background) 0%, var(--secondary-bg) 100%);
 }
 
-/* Shadow utilities with autumn colors */
+/* Shadow utilities */
 .shadow-primary {
-  box-shadow: 0 4px 6px -1px rgba(74, 47, 39, 0.1), 0 2px 4px -1px rgba(74, 47, 39, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(31, 31, 31, 0.1), 0 2px 4px -1px rgba(31, 31, 31, 0.06);
 }
 
 .shadow-accent {
-  box-shadow: 0 4px 6px -1px rgba(198, 93, 46, 0.1), 0 2px 4px -1px rgba(198, 93, 46, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(122, 158, 159, 0.1), 0 2px 4px -1px rgba(122, 158, 159, 0.06);
 }
 
 .shadow-calm {
-  box-shadow: 0 4px 6px -1px rgba(138, 154, 91, 0.1), 0 2px 4px -1px rgba(138, 154, 91, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(106, 142, 143, 0.1), 0 2px 4px -1px rgba(106, 142, 143, 0.06);
 }
 
 /* Text color variations */
-.text-primary-light { color: rgba(74, 47, 39, 0.8); }
-.text-primary-lighter { color: rgba(74, 47, 39, 0.6); }
-.text-accent-light { color: rgba(198, 93, 46, 0.8); }
-.text-accent-lighter { color: rgba(198, 93, 46, 0.6); }
+.text-primary-light { color: rgba(31, 31, 31, 0.8); }
+.text-primary-lighter { color: rgba(31, 31, 31, 0.6); }
+.text-accent-light { color: rgba(122, 158, 159, 0.8); }
+.text-accent-lighter { color: rgba(122, 158, 159, 0.6); }
 
 /* Background color variations */
-.bg-primary-light { background-color: rgba(74, 47, 39, 0.1); }
-.bg-accent-light { background-color: rgba(198, 93, 46, 0.1); }
-.bg-calm-accent-light { background-color: rgba(138, 154, 91, 0.1); }
+.bg-primary-light { background-color: rgba(31, 31, 31, 0.1); }
+.bg-accent-light { background-color: rgba(122, 158, 159, 0.1); }
+.bg-calm-accent-light { background-color: rgba(106, 142, 143, 0.1); }
 
 /* Border utilities */
 .border-t-primary { border-top-color: var(--primary); }
@@ -80,8 +84,8 @@
 
 /* Form elements */
 .input-autumn {
-  background-color: var(--background);
-  border: 1px solid var(--border);
+  background-color: var(--input-bg, #FFFFFF);
+  border: 1px solid var(--input-border, #DCDCDC);
   color: var(--foreground);
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
@@ -91,28 +95,28 @@
 .input-autumn:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(198, 93, 46, 0.1);
+  box-shadow: 0 0 0 3px rgba(122, 158, 159, 0.15);
 }
 
 .input-autumn::placeholder {
-  color: rgba(74, 47, 39, 0.5);
+  color: rgba(31, 31, 31, 0.4);
 }
 
 /* Status colors using the palette */
-.status-success { color: var(--calm-accent); }
-.status-warning { color: var(--accent); }
-.status-error { color: var(--primary); }
+.status-success { color: var(--accent); }
+.status-warning { color: #E0A458; }
+.status-error { color: #D45B5B; }
 
-.bg-status-success { background-color: rgba(138, 154, 91, 0.1); }
-.bg-status-warning { background-color: rgba(198, 93, 46, 0.1); }
-.bg-status-error { background-color: rgba(74, 47, 39, 0.1); }
+.bg-status-success { background-color: rgba(122, 158, 159, 0.1); }
+.bg-status-warning { background-color: rgba(224, 164, 88, 0.1); }
+.bg-status-error { background-color: rgba(212, 91, 91, 0.1); }
 
 /* Enhanced Navbar Styles */
 .navbar-autumn {
-  background-color: rgba(245, 239, 230, 0.95);
+  background-color: rgba(250, 249, 246, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(216, 195, 165, 0.3);
+  border-bottom: 1px solid rgba(229, 229, 229, 0.3);
 }
 
 /* Navbar animations */
@@ -180,7 +184,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(198, 93, 46, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(122, 158, 159, 0.1), transparent);
   transition: left 0.5s;
 }
 
@@ -238,50 +242,50 @@
 
 /* Variant 1: Glass Morphism */
 .glass-nav {
-  background: rgba(245, 239, 230, 0.8);
+  background: rgba(250, 249, 246, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(216, 195, 165, 0.3);
+  border: 1px solid rgba(229, 229, 229, 0.3);
 }
 
 .glass-button {
-  background: rgba(245, 239, 230, 0.5);
+  background: rgba(250, 249, 246, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(198, 93, 46, 0.3);
+  border: 1px solid rgba(122, 158, 159, 0.3);
 }
 
 /* Variant 2: Floating Pills */
 .pill-logo {
-  box-shadow: 0 8px 32px rgba(74, 47, 39, 0.3);
+  box-shadow: 0 8px 32px rgba(31, 31, 31, 0.15);
 }
 
 .pill-cta {
-  box-shadow: 0 8px 32px rgba(198, 93, 46, 0.3);
+  box-shadow: 0 8px 32px rgba(122, 158, 159, 0.3);
 }
 
 /* Variant 3: Sidebar */
 .menu-trigger {
-  box-shadow: 0 4px 20px rgba(74, 47, 39, 0.2);
+  box-shadow: 0 4px 20px rgba(31, 31, 31, 0.1);
 }
 
 /* Variant 4: Dock */
 .dock-container {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 
-              0 8px 25px rgba(74, 47, 39, 0.1),
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 
+              0 8px 25px rgba(31, 31, 31, 0.06),
               inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .dock-item {
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
 }
 
 .dock-logo {
-  box-shadow: 0 8px 25px rgba(74, 47, 39, 0.3);
+  box-shadow: 0 8px 25px rgba(31, 31, 31, 0.15);
 }
 
 .dock-cta {
-  box-shadow: 0 4px 15px rgba(138, 154, 91, 0.3);
+  box-shadow: 0 4px 15px rgba(122, 158, 159, 0.3);
 }
 
 /* Animations for all variants */
@@ -291,8 +295,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(198, 93, 46, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(198, 93, 46, 0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(122, 158, 159, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(122, 158, 159, 0.6); }
 }
 
 @keyframes dock-bounce {
@@ -303,7 +307,7 @@
 
 /* Hover effects */
 .glass-nav:hover {
-  background: rgba(245, 239, 230, 0.9);
+  background: rgba(250, 249, 246, 0.9);
 }
 
 .dock-item:hover {
@@ -352,14 +356,14 @@
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: var(--calm-accent);
 }
 /* ===== HERO SECTION STYLES ===== */
 
 /* Enhanced shadow for hero buttons */
 .shadow-3xl {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 
-              0 10px 30px -5px rgba(74, 47, 39, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 
+              0 10px 30px -5px rgba(31, 31, 31, 0.15);
 }
 
 /* Gradient text animation */
@@ -373,7 +377,7 @@
 }
 
 .gradient-text {
-  background: linear-gradient(-45deg, var(--background), var(--secondary-bg), var(--background), var(--calm-accent));
+  background: linear-gradient(-45deg, var(--accent), var(--calm-accent), var(--accent), var(--highlight-soft, #E8E1D9));
   background-size: 400% 400%;
   animation: gradient-shift 4s ease-in-out infinite;
   -webkit-background-clip: text;
@@ -475,8 +479,8 @@
 /* Background overlay patterns */
 .hero-pattern {
   background-image: 
-    radial-gradient(circle at 25% 25%, rgba(138, 154, 91, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(198, 93, 46, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 25% 25%, rgba(122, 158, 159, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(106, 142, 143, 0.08) 0%, transparent 50%);
 }
 
 /* Mobile optimizations */
@@ -504,7 +508,7 @@
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .hero-overlay {
-    background: rgba(74, 47, 39, 0.9);
+    background: rgba(31, 31, 31, 0.9);
   }
   
   .hero-text {

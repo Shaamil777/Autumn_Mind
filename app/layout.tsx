@@ -21,6 +21,11 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+export const metadata = {
+  title: 'Rida By Rahma',
+  description: 'Compassionate, expert online psychiatric care and mental health wellness.',
+};
+
 export default function RootLayout({
   children,
 }: {

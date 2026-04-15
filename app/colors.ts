@@ -1,5 +1,5 @@
 /**
- * Autumn Color System - TypeScript Constants
+ * Color System - TypeScript Constants
  * 
  * Use these constants when you need to access colors in JavaScript/TypeScript
  * For CSS, prefer using CSS custom properties from globals.css
@@ -7,30 +7,39 @@
 
 export const colors = {
   // Main palette
-  primary: '#4A2F27',           // Deep Autumn Brown
-  accent: '#C65D2E',            // Burnt Orange
-  background: '#F5EFE6',        // Soft Cream
-  calmAccent: '#8A9A5B',        // Sage Green
-  secondaryBg: '#D8C3A5',       // Warm Sand
+  primary: '#1F1F1F',             // Text Primary (Dark)
+  accent: '#7A9E9F',              // Accent Primary (Teal)
+  background: '#FAF9F6',          // Background Primary
+  calmAccent: '#6A8E8F',          // Accent Hover (Darker Teal)
+  secondaryBg: '#F1F1EF',         // Background Secondary
+
+  // Extended palette
+  surface: '#FFFFFF',
+  borderSubtle: '#E5E5E5',
+  textSecondary: '#6B6B6B',
+  textMuted: '#9A9A9A',
+  textInverse: '#FFFFFF',
+  highlightSoft: '#E8E1D9',
+  accentLight: '#E6F0F0',
 
   // Interactive states
-  primaryHover: '#3A251F',
-  accentHover: '#B5532A',
-  calmAccentHover: '#7A8A51',
+  primaryHover: '#333333',
+  accentHover: '#6A8E8F',
+  calmAccentHover: '#5A7E7F',
 
   // RGB values for use with opacity
-  primaryRgb: '74, 47, 39',
-  accentRgb: '198, 93, 46',
-  backgroundRgb: '245, 239, 230',
-  calmAccentRgb: '138, 154, 91',
-  secondaryBgRgb: '216, 195, 165',
+  primaryRgb: '31, 31, 31',
+  accentRgb: '122, 158, 159',
+  backgroundRgb: '250, 249, 246',
+  calmAccentRgb: '106, 142, 143',
+  secondaryBgRgb: '241, 241, 239',
 } as const;
 
 export const semanticColors = {
   foreground: colors.primary,
-  muted: colors.calmAccent,
-  border: colors.secondaryBg,
-  card: colors.background,
+  muted: colors.textMuted,
+  border: colors.borderSubtle,
+  card: colors.secondaryBg,
   cardForeground: colors.primary,
 } as const;
 
@@ -49,11 +58,11 @@ export const getCSSVariable = (colorName: string): string => {
 
 // Color palette for design tools or documentation
 export const colorPalette = [
-  { name: 'Primary', hex: colors.primary, description: 'Deep Autumn Brown' },
-  { name: 'Accent', hex: colors.accent, description: 'Burnt Orange' },
-  { name: 'Background', hex: colors.background, description: 'Soft Cream' },
-  { name: 'Calm Accent', hex: colors.calmAccent, description: 'Sage Green' },
-  { name: 'Secondary BG', hex: colors.secondaryBg, description: 'Warm Sand' },
+  { name: 'Primary', hex: colors.primary, description: 'Text Primary (Dark)' },
+  { name: 'Accent', hex: colors.accent, description: 'Accent Primary (Teal)' },
+  { name: 'Background', hex: colors.background, description: 'Background Primary' },
+  { name: 'Calm Accent', hex: colors.calmAccent, description: 'Accent Hover (Darker Teal)' },
+  { name: 'Secondary BG', hex: colors.secondaryBg, description: 'Background Secondary' },
 ] as const;
 
 export type ColorName = keyof typeof colors;

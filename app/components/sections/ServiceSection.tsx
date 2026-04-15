@@ -65,7 +65,7 @@ const services = [
 
 export default function ServiceSection() {
   return (
-    <section id="service" className="min-h-screen bg-background py-20 overflow-hidden">
+    <section id="service" className="min-h-screen py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">

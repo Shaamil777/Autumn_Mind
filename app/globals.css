@@ -1,41 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  /* Autumn Color Palette */
-  --primary: #4A2F27;           /* Deep Autumn Brown */
-  --primary-rgb: 74, 47, 39;
-  
-  --accent: #C65D2E;            /* Burnt Orange */
-  --accent-rgb: 198, 93, 46;
-  
-  --background: #F5EFE6;        /* Soft Cream */
-  --background-rgb: 245, 239, 230;
-  
-  --calm-accent: #8A9A5B;       /* Sage Green */
-  --calm-accent-rgb: 138, 154, 91;
-  
-  --secondary-bg: #D8C3A5;      /* Warm Sand */
-  --secondary-bg-rgb: 216, 195, 165;
-  
+  /* ── Color Palette ── */
+  --primary: #1F1F1F;             /* Text Primary / Dark */
+  --primary-rgb: 31, 31, 31;
+
+  --accent: #7A9E9F;              /* Accent Primary (Teal) */
+  --accent-rgb: 122, 158, 159;
+
+  --background: #FAF9F6;          /* Background Primary */
+  --background-rgb: 250, 249, 246;
+
+  --calm-accent: #6A8E8F;         /* Accent Hover (Darker Teal) */
+  --calm-accent-rgb: 106, 142, 143;
+
+  --secondary-bg: #F1F1EF;        /* Background Secondary */
+  --secondary-bg-rgb: 241, 241, 239;
+
+  /* Extended palette */
+  --surface: #FFFFFF;
+  --border-subtle: #E5E5E5;
+  --text-secondary: #6B6B6B;
+  --text-muted-color: #9A9A9A;
+  --text-inverse: #FFFFFF;
+  --highlight-soft: #E8E1D9;
+  --accent-light-color: #E6F0F0;
+
+  --input-bg: #FFFFFF;
+  --input-border: #DCDCDC;
+  --input-focus-border: #7A9E9F;
+
   /* Semantic color mappings */
   --foreground: var(--primary);
-  --muted: var(--calm-accent);
-  --border: var(--secondary-bg);
-  --card: var(--background);
+  --muted: var(--text-muted-color);
+  --border: var(--border-subtle);
+  --card: var(--secondary-bg);
   --card-foreground: var(--primary);
-  
+
   /* Interactive states */
-  --primary-hover: #3A251F;     /* Darker brown for hover */
-  --accent-hover: #B5532A;      /* Darker orange for hover */
-  --calm-accent-hover: #7A8A51; /* Darker sage for hover */
+  --primary-hover: #333333;       /* Slightly lighter dark for hover */
+  --accent-hover: #6A8E8F;       /* Darker teal for hover */
+  --calm-accent-hover: #5A7E7F;  /* Even deeper teal */
 }
 
 @theme inline {
   /* Base colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
-  /* Autumn palette colors */
+
+  /* Palette colors */
   --color-primary: var(--primary);
   --color-accent: var(--accent);
   --color-calm-accent: var(--calm-accent);
@@ -44,12 +57,16 @@
   --color-border: var(--border);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  
+  --color-surface: var(--surface);
+  --color-accent-light: var(--accent-light-color);
+  --color-highlight-soft: var(--highlight-soft);
+  --color-text-secondary: var(--text-secondary);
+
   /* Interactive states */
   --color-primary-hover: var(--primary-hover);
   --color-accent-hover: var(--accent-hover);
   --color-calm-accent-hover: var(--calm-accent-hover);
-  
+
   /* Typography */
   --font-sans: var(--font-quicksand);
   --font-mono: var(--font-geist-mono);
@@ -86,18 +103,18 @@ body {
 
 /* Interactive Elements */
 .btn-primary {
-  background-color: var(--primary);
-  color: var(--background);
+  background-color: var(--accent);
+  color: var(--text-inverse);
   transition: background-color 0.2s ease;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--accent-hover);
 }
 
 .btn-accent {
   background-color: var(--accent);
-  color: var(--background);
+  color: var(--text-inverse);
   transition: background-color 0.2s ease;
 }
 
@@ -107,7 +124,7 @@ body {
 
 .btn-calm {
   background-color: var(--calm-accent);
-  color: var(--background);
+  color: var(--text-inverse);
   transition: background-color 0.2s ease;
 }
 
