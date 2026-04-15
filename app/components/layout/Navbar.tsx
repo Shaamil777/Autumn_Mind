@@ -71,11 +71,12 @@ export default function Navbar() {
           
             <button
               onClick={() => scrollToSection('home')}
-              className={`font-bold text-2xl transition-all duration-300 font-sans ${
+              className={`font-bold text-2xl transition-all duration-300 ${
                 isScrolled 
                   ? 'text-accent hover:text-primary' 
                   : 'text-primary hover:text-accent drop-shadow-lg'
               }`}
+              style={{ fontFamily: 'var(--font-cormorant-garamond)' }}
             >
               Rida By Rahma
             </button>

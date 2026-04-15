@@ -82,8 +82,8 @@ export default function AboutSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <FadeInBlock className="text-center mb-20 md:mb-28">
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5"
-            style={{ color: "var(--primary)" }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-5"
+            style={{ color: "var(--primary)", fontFamily: "var(--font-cormorant-garamond)" }}
           >
             About Us
           </h2>
@@ -100,54 +100,112 @@ export default function AboutSection() {
         </FadeInBlock>
       </div>
 
-      {/* ── Our Story Block (no curved line) ── */}
+      {/* ── Our Story Block — Editorial Clean ── */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-20 md:mb-28">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
-          {/* Left – image */}
-          <FadeInBlock>
-            <div className="relative rounded-2xl overflow-hidden" style={{ height: "300px" }}>
-              <Image
-                src="/images/autumn.png"
-                alt="Our Story"
-                fill
-                className="object-cover"
-              />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(122,158,159,0.15) 0%, transparent 60%)",
-                }}
-              />
+
+        {/* Label row with extending line */}
+        <FadeInBlock>
+          <div className="flex items-center gap-5 mb-10">
+            <span
+              className="text-xs font-semibold tracking-[0.2em] uppercase shrink-0"
+              style={{ color: "var(--accent)" }}
+            >
+              Our Story
+            </span>
+            <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+          </div>
+        </FadeInBlock>
+
+        {/* Two-column: text left, image/SVG right */}
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
+
+          {/* Left — editorial text */}
+          <FadeInBlock delay={0.1}>
+            {/* Large heading */}
+            <h3
+              className="text-4xl md:text-5xl font-bold leading-[1.15] mb-8"
+              style={{ color: "var(--primary)", fontFamily: "var(--font-cormorant-garamond)" }}
+            >
+              Where It All Began
+            </h3>
+
+            {/* Pull-quote */}
+            <div
+              className="pl-6 mb-8"
+              style={{ borderLeft: "3px solid var(--accent)" }}
+            >
+              <p
+                className="text-lg md:text-xl leading-relaxed italic"
+                style={{ color: "var(--primary)", fontFamily: "var(--font-cormorant-garamond)" }}
+              >
+                &ldquo;We believe everyone deserves access to compassionate, expert
+                psychiatric care — no matter where they are.&rdquo;
+              </p>
+            </div>
+
+            {/* Two-column body text */}
+            <div className="grid sm:grid-cols-2 gap-6">
+              <p
+                className="text-[15px] leading-[1.8]"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                Founded with a vision to make mental health care accessible to
+                everyone, we&apos;ve grown from a dedicated individual practice into a
+                trusted partner for wellness worldwide.
+              </p>
+              <p
+                className="text-[15px] leading-[1.8]"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                Our journey began with a simple belief: that healing comes from
+                genuine connection. Today, we continue to uphold that value in every
+                consultation and every interaction.
+              </p>
             </div>
           </FadeInBlock>
 
-          {/* Right – text */}
-          <FadeInBlock delay={0.15}>
-            <div
-              className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
-              style={{
-                background: "rgba(122,158,159,0.1)",
-                color: "var(--accent)",
-              }}
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          {/* Right — Image / SVG placeholder */}
+          <FadeInBlock delay={0.25}>
+            <div className="relative flex items-center justify-center">
+              {/* Decorative SVG illustration — replace with your own image or SVG */}
+              <svg
+                viewBox="0 0 400 400"
+                fill="none"
+                className="w-full max-w-[360px] h-auto"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Soft background circle */}
+                <circle cx="200" cy="200" r="160" fill="var(--accent)" opacity="0.06" />
+                <circle cx="200" cy="200" r="120" fill="var(--accent)" opacity="0.06" />
+
+                {/* Abstract brain/mind lines */}
+                <g stroke="var(--accent)" strokeWidth="1.5" strokeLinecap="round" opacity="0.5">
+                  <path d="M160 180 C160 140, 200 120, 200 160 C200 120, 240 140, 240 180" />
+                  <path d="M150 200 C140 170, 180 150, 200 180 C220 150, 260 170, 250 200" />
+                  <path d="M155 220 C145 200, 175 185, 200 200 C225 185, 255 200, 245 220" />
+                </g>
+
+                {/* Heart shape — care/compassion */}
+                <path
+                  d="M200 260 C180 240, 150 240, 150 215 C150 195, 170 185, 200 210 C230 185, 250 195, 250 215 C250 240, 220 240, 200 260Z"
+                  stroke="var(--accent)"
+                  strokeWidth="1.5"
+                  fill="var(--accent)"
+                  opacity="0.12"
+                />
+
+                {/* Orbital rings */}
+                <ellipse cx="200" cy="200" rx="155" ry="50" stroke="var(--accent)" strokeWidth="0.8" opacity="0.15" transform="rotate(-20 200 200)" />
+                <ellipse cx="200" cy="200" rx="155" ry="50" stroke="var(--accent)" strokeWidth="0.8" opacity="0.15" transform="rotate(20 200 200)" />
+
+                {/* Small accent dots */}
+                <circle cx="130" cy="160" r="4" fill="var(--accent)" opacity="0.25" />
+                <circle cx="270" cy="160" r="4" fill="var(--accent)" opacity="0.25" />
+                <circle cx="200" cy="120" r="3" fill="var(--accent)" opacity="0.3" />
+                <circle cx="160" cy="280" r="3" fill="var(--accent)" opacity="0.2" />
+                <circle cx="250" cy="275" r="3" fill="var(--accent)" opacity="0.2" />
               </svg>
-              Our Story
             </div>
-            <h3
-              className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
-              style={{ color: "var(--primary)" }}
-            >
-              Where It All <span style={{ color: "var(--accent)" }}>Began</span>
-            </h3>
-            <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              Founded with a vision to transform the industry, we&apos;ve grown from a
-              small team of passionate individuals into a trusted partner for businesses
-              worldwide. Our journey began with a simple belief: that excellence comes
-              from dedication and genuine commitment.
-            </p>
           </FadeInBlock>
         </div>
       </div>

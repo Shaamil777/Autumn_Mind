@@ -58,7 +58,7 @@ export default function TeamSection() {
     <section id="team" className="min-h-screen py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-primary mb-4">Our Team</h2>
+          <h2 className="text-6xl font-bold text-primary mb-4" style={{ fontFamily: 'var(--font-cormorant-garamond)' }}>Our Team</h2>
           <div className="w-24 h-1 bg-accent mx-auto mb-6 rounded-full"></div>
           <p className="text-xl text-primary/70 max-w-3xl mx-auto">
             Meet our experienced and caring mental health professionals dedicated to your well-being.

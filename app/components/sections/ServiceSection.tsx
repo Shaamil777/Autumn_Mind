@@ -69,7 +69,7 @@ export default function ServiceSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-primary mb-4">Our Services</h2>
+          <h2 className="text-6xl font-bold text-primary mb-4" style={{ fontFamily: 'var(--font-cormorant-garamond)' }}>Our Services</h2>
           <div className="w-24 h-1 bg-accent mx-auto mb-6"></div>
           <p className="text-lg text-primary/70 max-w-2xl mx-auto">
             Discover our comprehensive range of mental health services tailored to support you at every stage of your life's journey.

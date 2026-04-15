@@ -1,7 +1,7 @@
 import "./globals.css";
 import "./colors.css";
 import Navbar from "./components/layout/Navbar";
-import { Quicksand, Playfair_Display, Inter } from 'next/font/google';
+import { Quicksand, Playfair_Display, Inter, Cormorant_Garamond } from 'next/font/google';
 
 const quicksand = Quicksand({
   subsets: ['latin'],
@@ -21,6 +21,12 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-cormorant-garamond',
+});
+
 export const metadata = {
   title: 'Rida By Rahma',
   description: 'Compassionate, expert online psychiatric care and mental health wellness.',
@@ -33,10 +39,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${quicksand.variable} ${playfair.variable} ${inter.variable} font-quicksand`}>
+      <body className={`${quicksand.variable} ${playfair.variable} ${inter.variable} ${cormorantGaramond.variable} font-quicksand`}>
         <Navbar />
         {children}
       </body>
     </html>
   );
 }
+
