@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const teamMembers = [
   {
@@ -46,162 +47,182 @@ const teamMembers = [
 ];
 
 export default function TeamSection() {
-  const [selectedMember, setSelectedMember] = useState<typeof teamMembers[0] | null>(null);
+  const [activeId, setActiveId] = useState<number>(teamMembers[0].id);
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      setSelectedMember(null);
-    }
-  };
+  // New Style: Split-Screen Image Presentation with Typography Hover
+  // Includes 'clipPath' shutter effect (top and bottom collapse).
 
   return (
-    <section id="team" className="min-h-screen py-24 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-6xl font-bold text-primary mb-4" style={{ fontFamily: 'var(--font-cormorant-garamond)' }}>Our Team</h2>
-          <div className="w-24 h-1 bg-accent mx-auto mb-6 rounded-full"></div>
-          <p className="text-xl text-primary/70 max-w-3xl mx-auto">
-            Meet our experienced and caring mental health professionals dedicated to your well-being.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {teamMembers.map((member) => (
-            <div 
-              key={member.id} 
-              className="bg-background rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group flex flex-col h-full border hover:border-accent/40 border-primary/5 transform hover:-translate-y-2 cursor-pointer"
-              onClick={() => setSelectedMember(member)}
-            >
-              <div className="relative h-80 w-full overflow-hidden">
-                <img 
-                  src={member.image} 
-                  alt={member.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
-                <div className="absolute inset-x-0 bottom-0 p-6 transform translate-y-4 group-hover:translate-y-0 text-center transition-transform duration-300 origin-bottom">
-                  <h3 className="text-2xl font-bold text-background mb-1 drop-shadow-md">{member.name}</h3>
-                  <p className="text-background/90 text-sm font-medium drop-shadow-md">{member.role}</p>
-                </div>
-              </div>
-              
-              <div className="p-6 flex flex-col flex-grow bg-background relative z-10 text-center">
-                <p className="text-primary/70 mb-8 flex-grow leading-relaxed">{member.shortBio}</p>
-                
-                <div className="flex gap-3 mt-auto">
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.location.href = '#booking';
-                    }}
-                    className="flex-1 bg-primary text-background px-4 py-3 rounded-xl text-sm font-bold hover:bg-accent hover:text-white transition-colors shadow-md hover:shadow-lg active:scale-95"
-                  >
-                    Book Now
-                  </button>
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMember(member);
-                    }}
-                    className="flex-1 bg-secondary-bg text-primary px-4 py-3 rounded-xl text-sm font-bold hover:bg-primary/5 transition-all outline outline-1 outline-primary/10 hover:outline-primary/30"
-                  >
-                    Details
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="team" className="py-12 md:py-24 w-full relative" style={{ background: "var(--background)" }}>
+      
+      {/* ── Section Header ── */}
+      <div className="max-w-[90vw] mx-auto px-4 lg:px-8 mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex items-center gap-5 justify-center md:justify-start"
+        >
+          <div className="w-12 h-[1px]" style={{ background: "var(--accent)" }} />
+          <span className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--accent)" }}>
+            Our Care Professionals
+          </span>
+          <div className="w-12 h-[1px] md:hidden" style={{ background: "var(--accent)" }} />
+        </motion.div>
       </div>
 
-      {/* Modal Overlay */}
-      {selectedMember && (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-primary/80 backdrop-blur-md transition-all duration-300 opacity-100"
-          onClick={handleBackdropClick}
-        >
-          <div className="bg-background rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] sm:max-h-[85vh] relative transform scale-100 transition-all duration-300">
-            
-            <button 
-              onClick={() => setSelectedMember(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-background/50 backdrop-blur-sm text-primary rounded-full flex items-center justify-center hover:bg-background/80 hover:text-accent transition-colors shadow-sm"
-              aria-label="Close modal"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+      <div className="max-w-[95vw] lg:max-w-screen-2xl mx-auto px-4 lg:px-8 pb-24">
+        
+        {/* Responsive Grid layout for Mobile and Desktop */}
+        <div className="flex flex-col md:flex-row-reverse gap-10 lg:gap-16 items-start relative">
 
-            {/* Modal Image Side */}
-            <div className="w-full md:w-5/12 h-72 md:h-auto relative shrink-0">
-              <img 
-                src={selectedMember.image} 
-                alt={selectedMember.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent md:hidden"></div>
-              <div className="absolute bottom-6 left-6 right-6 md:hidden">
-                <h3 className="text-3xl font-bold text-background mb-1">{selectedMember.name}</h3>
-                <p className="text-background/90 text-lg font-medium">{selectedMember.role}</p>
-              </div>
-            </div>
+          {/* ── Image Panel ── */}
+          <div className="w-full md:w-6/12 lg:w-1/2 aspect-[4/5] sticky top-28 rounded-xl md:rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.12)] bg-[#0a0f0f]">
+             
+             <AnimatePresence>
+               {teamMembers.map(member => {
+                 if (member.id !== activeId) return null;
+                 return (
+                   <motion.div
+                     key={member.id}
+                     initial={{ clipPath: "inset(50% 0% 50% 0%)", filter: "brightness(0.5)" }}
+                     animate={{ clipPath: "inset(0% 0% 0% 0%)", filter: "brightness(1)", zIndex: 10 }}
+                     exit={{ clipPath: "inset(50% 0% 50% 0%)", filter: "brightness(0.5)", zIndex: 0 }}
+                     transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }} // Highly cinematic easing
+                     className="absolute inset-0 w-full h-full"
+                   >
+                     {/* The Portrait */}
+                     <img 
+                       src={member.image} 
+                       alt={member.name}
+                       className="w-full h-full object-cover object-center" 
+                     />
+                     
+                     {/* Deep shadows to ensure text pops */}
+                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-[#0a0a0a]/30 to-transparent pointer-events-none" />
 
-            {/* Modal Content Side */}
-            <div className="w-full md:w-7/12 p-8 md:p-10 lg:p-12 overflow-y-auto flex flex-col bg-background">
-              <div className="hidden md:block mb-8">
-                <h3 className="text-4xl font-bold text-primary mb-2">{selectedMember.name}</h3>
-                <p className="text-accent text-xl font-semibold">{selectedMember.role}</p>
-              </div>
+                     {/* Image Overlay Interactivity (Text & Button) */}
+                     <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 lg:p-16 flex flex-col justify-end">
+                       <motion.div
+                         initial={{ opacity: 0, y: 30 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                         className="max-w-xl"
+                       >
+                         {/* Name is repeated here visually to bind it directly to the portrait */}
+                         <p className="text-[11px] font-bold tracking-[0.3em] uppercase mb-4" style={{ color: "var(--accent)" }}>
+                           {member.role}
+                         </p>
+                         
+                         <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6 drop-shadow-md md:hidden" style={{ fontFamily: "var(--font-cormorant-garamond)" }}>
+                           {member.name}
+                         </h3>
 
-              <div className="space-y-8 flex-grow">
-                <div>
-                  <h4 className="text-xs font-bold text-primary/40 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    About
-                  </h4>
-                  <p className="text-primary/80 leading-relaxed text-base md:text-lg">
-                    {selectedMember.fullBio}
-                  </p>
-                </div>
+                         <p className="text-[15px] md:text-[17px] leading-[1.8] font-medium text-white/90 mb-8 max-w-lg shadow-[0_0_20px_rgba(0,0,0,0.5)] bg-black/10 backdrop-blur-[2px] p-4 rounded-xl md:bg-transparent md:p-0 md:backdrop-blur-none">
+                           {member.fullBio}
+                         </p>
+                         
+                         <div className="flex flex-wrap gap-2 mb-8 hidden md:flex">
+                           {member.specialties.map((s, idx) => (
+                             <span key={idx} className="px-4 py-2 border border-white/20 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase font-bold tracking-widest text-white shadow-sm">
+                               {s}
+                             </span>
+                           ))}
+                         </div>
 
-                <div>
-                  <h4 className="text-xs font-bold text-primary/40 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Specialties
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedMember.specialties.map((specialty, idx) => (
-                      <span key={idx} className="bg-secondary-bg text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/5">
-                        {specialty}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-bold text-primary/40 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14v7" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10v7" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 10v7" /></svg>
-                    Education
-                  </h4>
-                  <p className="text-primary/80 font-medium text-base">{selectedMember.education}</p>
-                </div>
-              </div>
-
-              <div className="mt-10 pt-8 border-t border-primary/10">
-                <button 
-                  onClick={() => {
-                    setSelectedMember(null);
-                    window.location.href = '#booking';
-                  }}
-                  className="w-full bg-primary text-background py-5 rounded-2xl font-bold text-xl hover:bg-accent hover:text-white transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0 active:scale-95 flex items-center justify-center gap-3 group"
-                >
-                  <svg className="w-6 h-6 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-
+                         <button 
+                           onClick={() => {
+                             window.location.href = '#booking';
+                           }}
+                           className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-5 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 hover:shadow-[0_10px_30px_rgba(255,255,255,0.2)] bg-white text-black hover:bg-transparent hover:text-white border border-transparent hover:border-white hover:-translate-y-1"
+                         >
+                           Reserve Session
+                           <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                         </button>
+                       </motion.div>
+                     </div>
+                   </motion.div>
+                 );
+               })}
+             </AnimatePresence>
           </div>
+
+          {/* ── Left Side: Stroke Typography Selector ── */}
+          <div className="w-full md:w-6/12 lg:w-1/2 flex flex-col justify-center pt-8 md:pt-16 pb-[10vh]">
+             <div className="flex flex-col border-t" style={{ borderColor: "var(--border-subtle)" }}>
+                {teamMembers.map((member, index) => {
+                  const isActive = activeId === member.id;
+                  const displayNum = String(index + 1).padStart(2, "0");
+
+                  return (
+                    <motion.div 
+                      key={member.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      onMouseEnter={() => setActiveId(member.id)}
+                      onClick={() => setActiveId(member.id)} 
+                      className="cursor-pointer group flex items-start py-8 lg:py-10 border-b transition-all duration-500"
+                      style={{ borderColor: "var(--border-subtle)" }}
+                    >
+                      <div className="flex gap-6 md:gap-10 w-full items-center">
+                         
+                         {/* The rotating index text indicator */}
+                         <div className="flex flex-col items-center shrink-0 w-8">
+                           <span 
+                             className="text-sm font-semibold tracking-widest transition-all duration-[0.6s]"
+                             style={{ 
+                               color: isActive ? "var(--accent)" : "var(--text-secondary)",
+                               transform: isActive ? "rotate(-90deg) scale(1.1)" : "rotate(0deg) scale(1)",
+                               opacity: isActive ? 1 : 0.4
+                             }}
+                           >
+                             {displayNum}
+                           </span>
+                         </div>
+                         
+                         {/* The Stroke/Fill Typography */}
+                         <div className="flex-1 overflow-hidden">
+                           <h3 
+                             className="text-4xl md:text-5xl lg:text-[4rem] xl:text-[5rem] font-bold leading-none tracking-tight transition-all duration-[0.6s] ease-[cubic-bezier(0.19,1,0.22,1)] whitespace-nowrap"
+                             style={{ 
+                               fontFamily: "var(--font-cormorant-garamond)",
+                               WebkitTextStroke: isActive ? "0px" : "1px var(--primary)",
+                               color: isActive ? "var(--primary)" : "transparent",
+                               opacity: isActive ? 1 : 0.25,
+                               transform: isActive ? "translateX(1rem)" : "translateX(0)"
+                             }}
+                           >
+                             {member.name}
+                           </h3>
+                           
+                           {/* Role smoothly unrolling under active name */}
+                           <div 
+                             className="overflow-hidden transition-all duration-[0.6s] ease-[cubic-bezier(0.19,1,0.22,1)]"
+                             style={{ 
+                               height: isActive ? "24px" : "0px",
+                               opacity: isActive ? 1 : 0,
+                               marginTop: isActive ? "16px" : "0px",
+                               transform: isActive ? "translateX(1.3rem)" : "translateX(0)"
+                             }}
+                           >
+                             <p className="text-[10px] font-bold tracking-[0.25em] uppercase" style={{ color: "var(--accent)" }}>
+                               {member.role}
+                             </p>
+                           </div>
+                         </div>
+                         
+                      </div>
+                    </motion.div>
+                  );
+                })}
+             </div>
+          </div>
+
         </div>
-      )}
+      </div>
     </section>
   );
 }
