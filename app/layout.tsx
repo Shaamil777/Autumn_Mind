@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./colors.css";
 import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 import { Quicksand, Playfair_Display, Inter, Cormorant_Garamond } from 'next/font/google';
 
 const quicksand = Quicksand({
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body className={`${quicksand.variable} ${playfair.variable} ${inter.variable} ${cormorantGaramond.variable} font-quicksand`}>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

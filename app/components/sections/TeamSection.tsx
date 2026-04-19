@@ -1,6 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const teamMembers = [
@@ -46,12 +52,134 @@ const teamMembers = [
   }
 ];
 
+function calculateGap(width: number) {
+  const minWidth = 1024;
+  const maxWidth = 1456;
+  const minGap = 60;
+  const maxGap = 100;
+  if (width <= minWidth) return minGap;
+  if (width >= maxWidth)
+    return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
+  return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
+}
+
 export default function TeamSection() {
-  const [selectedMember, setSelectedMember] = useState<typeof teamMembers[0] | null>(null);
+  const autoplay = true;
+
+  // State
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoverPrev, setHoverPrev] = useState(false);
+  const [hoverNext, setHoverNext] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(1200);
+
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const testimonialsLength = useMemo(() => teamMembers.length, []);
+  const activeTestimonial = useMemo(
+    () => teamMembers[activeIndex],
+    [activeIndex]
+  );
+
+  // Responsive gap calculation
+  useEffect(() => {
+    function handleResize() {
+      if (imageContainerRef.current) {
+        setContainerWidth(imageContainerRef.current.offsetWidth);
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Autoplay
+  useEffect(() => {
+    if (autoplay) {
+      autoplayIntervalRef.current = setInterval(() => {
+        setActiveIndex((prev) => (prev + 1) % testimonialsLength);
+      }, 7000); // 7 seconds to allow enough reading time
+    }
+    return () => {
+      if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
+    };
+  }, [autoplay, testimonialsLength]);
+
+  // Navigation handlers
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % testimonialsLength);
+    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
+  }, [testimonialsLength]);
+
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + testimonialsLength) % testimonialsLength);
+    if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
+  }, [testimonialsLength]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+    // eslint-disable-next-line
+  }, [activeIndex, testimonialsLength]);
+
+  // Compute transforms for each image
+  function getImageStyle(index: number): React.CSSProperties {
+    const gap = calculateGap(containerWidth);
+    const maxStickUp = gap * 0.8;
+    const isActive = index === activeIndex;
+    const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
+    const isRight = (activeIndex + 1) % testimonialsLength === index;
+    
+    if (isActive) {
+      return {
+        zIndex: 3,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    if (isLeft) {
+      return {
+        zIndex: 2,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(15deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    if (isRight) {
+      return {
+        zIndex: 2,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-15deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    // Hide all other images
+    return {
+      zIndex: 1,
+      opacity: 0,
+      pointerEvents: "none",
+      transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+    };
+  }
+
+  // Framer Motion variants
+  const contentVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
 
   return (
-    <section id="team" className="py-20 md:py-32 w-full relative" style={{ background: "var(--background)" }}>
-      
+    <section id="team" className="py-20 md:py-32 w-full relative overflow-hidden" style={{ background: "var(--background)" }}>
       {/* ── Section Header ── */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-16 md:mb-24">
         <motion.div 
@@ -78,173 +206,137 @@ export default function TeamSection() {
         </motion.div>
       </div>
 
-      {/* ── Visual Grid Layout ── */}
-      <div className="max-w-[95vw] lg:max-w-screen-2xl mx-auto px-4 lg:px-8 pb-10">
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 pb-8 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {teamMembers.map((member, index) => (
-            <motion.div
-              key={member.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="flex-none w-[80vw] sm:w-[60vw] md:w-auto snap-center"
-            >
-              <div 
-                className="group relative w-full aspect-[3/4] md:aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer bg-[#0a0a0a] shadow-[0_20px_40px_rgba(0,0,0,0.1)]"
-                onClick={() => setSelectedMember(member)}
+      {/* ── Carousel Layout ── */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
+          {/* Images */}
+          <div 
+            className="relative w-full max-w-[450px] mx-auto lg:mx-0 h-[400px] md:h-[550px]" 
+            style={{ perspective: "1000px" }}
+            ref={imageContainerRef}
+          >
+            {teamMembers.map((member, index) => (
+              <img
+                key={member.id}
+                src={member.image}
+                alt={member.name}
+                className="absolute inset-0 w-full h-full object-cover rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-[#E6E6E6]"
+                data-index={index}
+                style={getImageStyle(index)}
+              />
+            ))}
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col justify-start w-full lg:max-w-md">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                variants={contentVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="flex flex-col"
               >
-                 
-                 {/* Background Image */}
-                 <img 
-                   src={member.image} 
-                   alt={member.name}
-                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-105" 
-                 />
-                 
-                 {/* Permanent Bottom Gradient & Hover Deepening */}
-                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/95 via-[#050505]/40 to-transparent transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:from-black group-hover:via-black/70 group-hover:to-black/30 opacity-80 group-hover:opacity-100" />
-                 
-                 {/* Specific Accent Color Wash on Hover (subtle) */}
-                 <div className="absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 group-hover:opacity-[0.03]" style={{ background: "var(--accent)" }} />
-                 
-                 {/* Content Wrapper */}
-                 <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 flex flex-col justify-end transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                   
-                   {/* Persistent Headers (Slide up on hover) */}
-                   <div className="transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2">
-                     <p className="text-[9px] md:text-[10px] font-bold tracking-[0.25em] uppercase mb-2 md:mb-3" style={{ color: "var(--accent)" }}>
-                       {member.role}
-                     </p>
-                     <h3 className="text-3xl md:text-4xl text-white font-bold leading-none drop-shadow-lg" style={{ fontFamily: "var(--font-cormorant-garamond)" }}>
-                       {member.name}
-                     </h3>
-                   </div>
+                <h3 
+                  className="text-3xl md:text-5xl font-bold mb-3 text-[var(--primary)]"
+                  style={{ fontFamily: "var(--font-cormorant-garamond)" }}
+                >
+                  {activeTestimonial.name}
+                </h3>
+                <p 
+                  className="text-sm md:text-base font-medium tracking-[0.1em] uppercase mb-8"
+                  style={{ color: "var(--accent)" }}
+                >
+                  {activeTestimonial.role}
+                </p>
+                <motion.div 
+                  className="text-base md:text-lg leading-relaxed font-light mb-10"
+                  style={{ color: "var(--text-secondary)", minHeight: "150px" }}
+                >
+                  {activeTestimonial.fullBio.split(" ").map((word, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{
+                        filter: "blur(8px)",
+                        opacity: 0,
+                        y: 5,
+                      }}
+                      animate={{
+                        filter: "blur(0px)",
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      transition={{
+                        duration: 0.3,
+                        ease: "easeOut",
+                        delay: 0.015 * i,
+                      }}
+                      style={{ display: "inline-block" }}
+                    >
+                      {word}&nbsp;
+                    </motion.span>
+                  ))}
+                </motion.div>
+                
+                {/* Specialities & Interaction */}
+                <div className="flex flex-wrap gap-2 mb-10">
+                  {activeTestimonial.specialties.map((s, idx) => (
+                      <span key={idx} className="px-4 py-2 border border-black/10 bg-black/5 rounded-full text-[10px] uppercase font-semibold tracking-widest text-[#1f1f1f]">
+                        {s}
+                      </span>
+                  ))}
+                </div>
 
-                   {/* Accordion Detail Reveal (Hidden initially, expands on group-hover) */}
-                   <div className="grid grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                     <div className="overflow-hidden">
-                       <div className="pt-5">
-                         
-                         <p className="text-[13px] md:text-[14px] text-white/80 leading-relaxed mb-6 font-light" style={{ display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                           {member.shortBio}
-                         </p>
-                         
-                         <div className="flex flex-wrap gap-2 mb-8">
-                           {member.specialties.map((s, idx) => (
-                              <span key={idx} className="px-3 py-1.5 border border-white/20 bg-white/5 backdrop-blur-md rounded-full text-[9px] uppercase font-semibold tracking-widest text-white/90">
-                                {s}
-                              </span>
-                           ))}
-                         </div>
+              </motion.div>
+            </AnimatePresence>
 
-                         <a 
-                           href="#booking"
-                           className="inline-flex w-full items-center justify-center gap-3 px-6 py-4 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 bg-white text-black hover:bg-transparent hover:text-white border border-transparent hover:border-white group/btn"
-                           onClick={(e) => {
-                             // Let normal link action occur, avoid interfering
-                           }}
-                         >
-                           Reserve Session
-                           <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                         </a>
-                         
-                       </div>
-                     </div>
-                   </div>
+            <div className="flex items-center justify-between w-full mt-4 border-t border-[var(--border-subtle)] pt-8">
+              <a 
+                href="#booking"
+                className="inline-flex w-fit items-center justify-center gap-3 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 bg-[var(--primary)] text-white hover:bg-[var(--accent)] shadow-lg hover:shadow-xl group"
+              >
+                Reserve Session
+                <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </a>
 
-                 </div>
+              <div className="flex gap-4">
+                <button
+                  className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-none bg-[#141414]"
+                  onClick={handlePrev}
+                  style={{
+                    backgroundColor: hoverPrev ? "var(--accent)" : "var(--primary)",
+                  }}
+                  onMouseEnter={() => setHoverPrev(true)}
+                  onMouseLeave={() => setHoverPrev(false)}
+                  aria-label="Previous Team Member"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-none bg-[#141414]"
+                  onClick={handleNext}
+                  style={{
+                    backgroundColor: hoverNext ? "var(--accent)" : "var(--primary)",
+                  }}
+                  onMouseEnter={() => setHoverNext(true)}
+                  onMouseLeave={() => setHoverNext(false)}
+                  aria-label="Next Team Member"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
-            </motion.div>
-          ))}
+            </div>
+            
+          </div>
         </div>
       </div>
-      {/* ── Member Details Modal ── */}
-      <AnimatePresence>
-        {selectedMember && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center items-center p-0 md:p-6 bg-black/60 backdrop-blur-sm"
-            onClick={() => setSelectedMember(null)}
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: "100%", scale: 1 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: "100%", scale: 0.95 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full md:w-auto md:min-w-[800px] md:max-w-5xl bg-[#0a0a0a] md:rounded-3xl rounded-t-3xl overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.6)] flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh]"
-            >
-              {/* Close button */}
-              <button 
-                className="absolute top-4 md:top-6 right-4 md:right-6 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-[var(--accent)] hover:text-black backdrop-blur-md transition-all duration-300"
-                onClick={() => setSelectedMember(null)}
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 13L13 1M1 1L13 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-
-              {/* Left: Image Panel */}
-              <div className="w-full md:w-5/12 h-[35vh] md:h-auto relative shrink-0">
-                <img src={selectedMember.image} alt={selectedMember.name} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0a0a0a]" />
-              </div>
-
-              {/* Right: Info Panel */}
-              <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10">
-                <p className="text-[10px] md:text-[11px] font-bold tracking-[0.25em] uppercase text-[var(--accent)] mb-2">
-                  {selectedMember.role}
-                </p>
-                <h3 className="text-4xl md:text-5xl text-white font-bold mb-8 md:mb-10" style={{ fontFamily: "var(--font-cormorant-garamond)" }}>
-                  {selectedMember.name}
-                </h3>
-
-                <div className="space-y-8 flex-1">
-                  <div>
-                    <h4 className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-3">About</h4>
-                    <p className="text-[14px] md:text-[15px] font-light leading-relaxed text-white/85">
-                      {selectedMember.fullBio}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-3">Education</h4>
-                    <p className="text-[14px] md:text-[15px] text-white/90">
-                      {selectedMember.education}
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold mb-4">Specialties</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedMember.specialties.map((s, idx) => (
-                        <span key={idx} className="px-4 py-2 border border-white/10 bg-white/5 rounded-full text-[10px] uppercase font-semibold tracking-widest text-white/80">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-10 md:mt-12 pt-8 border-t border-white/10">
-                  <button 
-                    onClick={() => {
-                      window.location.href = '#booking';
-                      setSelectedMember(null);
-                    }}
-                    className="w-full md:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 bg-white text-black hover:bg-[var(--accent)] hover:text-black hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
-                  >
-                    Reserve Session
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
