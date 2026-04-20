@@ -6,6 +6,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isBannerVisible, setIsBannerVisible] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -215,34 +216,58 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Notification Banner with slide-down animation */}
-      <div className={`fixed left-0 right-0 z-30 bg-primary text-background py-2 px-4 transition-all duration-500 ease-out ${
-        isScrolled 
-          ? 'top-16 transform translate-y-0 opacity-100 delay-300' 
-          : 'top-0 transform -translate-y-full opacity-0'
+      {/* Dismissible Floating Toast Notification */}
+      <div className={`fixed z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none ${
+        isBannerVisible 
+          ? 'bottom-6 md:bottom-10 right-4 md:right-10 translate-y-0 opacity-100' 
+          : 'bottom-4 md:bottom-8 right-4 md:right-10 translate-y-10 opacity-0 pointer-events-none'
       }`}>
-        <div className="flex items-center justify-between px-6 lg:px-8">
-          <div className="flex items-center space-x-4">
-            <button className="text-background/80 hover:text-background">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <p className="text-sm font-medium font-quicksand">
-              Rida By Rahma is now offering online therapy worldwide. Get expert care, no matter where you are.
-            </p>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="bg-calm-accent hover:bg-accent text-background px-4 py-1 rounded text-sm font-medium transition-colors duration-200 font-quicksand"
-            >
-              BOOK YOUR SESSION →
-            </button>
-          </div>
-          <button className="text-background/80 hover:text-background">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        <div className="bg-white rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-[var(--border-subtle)] p-4 md:p-5 pointer-events-auto overflow-hidden relative max-w-[340px]">
+          
+          {/* Subtle Accent Line */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-[var(--accent)]" />
+
+          {/* Close Button */}
+          <button 
+            onClick={() => setIsBannerVisible(false)}
+            className="absolute top-4 right-4 text-black/40 hover:text-black transition-colors"
+            aria-label="Close notification"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
+
+          <div className="flex gap-4 items-start pr-4">
+            <div className="bg-[var(--accent)]/10 text-[var(--accent)] w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-1">
+               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+               </svg>
+            </div>
+            
+            <div className="flex flex-col gap-1.5">
+              <h4 className="text-[13px] font-bold text-[var(--primary)] uppercase tracking-wide">
+                Global Access
+              </h4>
+              <p className="text-[12px] md:text-[13px] leading-relaxed font-medium text-[var(--text-secondary)]">
+                We now offer remote therapy sessions globally. Start your journey today!
+              </p>
+              
+              <button 
+                onClick={() => {
+                  scrollToSection('contact');
+                  setIsBannerVisible(false);
+                }}
+                className="mt-2 text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--accent)] hover:text-[var(--primary)] transition-colors w-fit group flex items-center gap-1"
+              >
+                Learn More
+                <svg className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </>
