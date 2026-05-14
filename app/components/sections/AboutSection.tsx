@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
-import Image from "next/image";
+import { motion, useInView } from "framer-motion";
 
 /* ─── Fade-in block that triggers only once ─── */
 function FadeInBlock({
@@ -30,36 +29,260 @@ function FadeInBlock({
   );
 }
 
+/* ─── Vision & Mission — stacked cards that split on scroll ─── */
+function VisionMissionCards() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-80px" });
+
+  const springConfig = {
+    type: "spring" as const,
+    stiffness: 50,
+    damping: 20,
+    mass: 1,
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative max-w-7xl mx-auto px-6 lg:px-8"
+    >
+      {/* Section sub-label */}
+      <div className="text-center mb-14">
+        <span
+          className="text-xs font-semibold tracking-[0.2em] uppercase"
+          style={{ color: "var(--accent)" }}
+        >
+          What Drives Us
+        </span>
+      </div>
+
+      {/* Cards wrapper — on desktop, both cards start stacked at center, then split */}
+      <div
+        className="relative"
+        style={{ minHeight: isInView ? "auto" : "520px" }}
+      >
+        <div
+          className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-10"
+          style={{
+            perspective: "1200px",
+          }}
+        >
+          {/* ── Vision Card (slides LEFT + tilts) ── */}
+          <motion.div
+            className="w-full md:w-1/2 max-w-[540px] mx-auto md:mx-0"
+            initial={{
+              x: "30%",
+              y: 10,
+              rotate: 0,
+              rotateY: 3,
+              scale: 0.96,
+            }}
+            animate={
+              isInView
+                ? { x: "0%", y: -16, rotate: -3, rotateY: 0, scale: 1 }
+                : { x: "30%", y: 10, rotate: 0, rotateY: 3, scale: 0.96 }
+            }
+            transition={{ ...springConfig, delay: 0.1 }}
+          >
+            <motion.div
+              className="relative rounded-2xl p-8 md:p-10 h-full"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border-subtle)",
+                boxShadow: "0 8px 40px rgba(106,142,143,0.08)",
+              }}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 16px 56px rgba(106,142,143,0.18)",
+                transition: { duration: 0.3 },
+              }}
+            >
+              {/* Decorative corner accent */}
+              <div
+                className="absolute top-0 left-0 w-20 h-20 rounded-tl-2xl pointer-events-none"
+                style={{
+                  borderTop: "2px solid var(--calm-accent)",
+                  borderLeft: "2px solid var(--calm-accent)",
+                  opacity: 0.25,
+                }}
+              />
+
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
+                style={{
+                  background: "rgba(106,142,143,0.1)",
+                  color: "var(--calm-accent)",
+                }}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                Our Vision
+              </div>
+
+              {/* Heading */}
+              <h3
+                className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
+                style={{ color: "var(--primary)", fontFamily: "var(--font-cormorant-garamond)" }}
+              >
+                Shaping The{" "}
+                <span style={{ color: "var(--calm-accent)" }}>Future</span>
+              </h3>
+
+              {/* Description */}
+              <p
+                className="text-base leading-relaxed mb-7"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                To be recognized as a global leader in our field, setting industry
+                standards and inspiring positive change. We envision a future where
+                our innovative solutions make a meaningful difference in the lives
+                of people worldwide.
+              </p>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-3">
+                <div
+                  className="rounded-xl p-4 text-center"
+                  style={{ background: "rgba(106,142,143,0.06)" }}
+                >
+                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--calm-accent)" }}>10+</div>
+                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Years</div>
+                </div>
+                <div
+                  className="rounded-xl p-4 text-center"
+                  style={{ background: "rgba(106,142,143,0.06)" }}
+                >
+                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--calm-accent)" }}>500+</div>
+                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Projects</div>
+                </div>
+              </div>
+
+              {/* Decorative bottom-right accent line */}
+              <div
+                className="absolute bottom-0 right-0 w-20 h-20 rounded-br-2xl pointer-events-none"
+                style={{
+                  borderBottom: "2px solid var(--calm-accent)",
+                  borderRight: "2px solid var(--calm-accent)",
+                  opacity: 0.12,
+                }}
+              />
+            </motion.div>
+          </motion.div>
+
+          {/* ── Mission Card (slides RIGHT + tilts) ── */}
+          <motion.div
+            className="w-full md:w-1/2 max-w-[540px] mx-auto md:mx-0"
+            initial={{
+              x: "-30%",
+              y: -10,
+              rotate: 0,
+              rotateY: -3,
+              scale: 0.96,
+            }}
+            animate={
+              isInView
+                ? { x: "0%", y: 16, rotate: 3, rotateY: 0, scale: 1 }
+                : { x: "-30%", y: -10, rotate: 0, rotateY: -3, scale: 0.96 }
+            }
+            transition={{ ...springConfig, delay: 0.2 }}
+          >
+            <motion.div
+              className="relative rounded-2xl p-8 md:p-10 h-full"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border-subtle)",
+                boxShadow: "0 8px 40px rgba(122,158,159,0.08)",
+              }}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 16px 56px rgba(122,158,159,0.18)",
+                transition: { duration: 0.3 },
+              }}
+            >
+              {/* Decorative corner accent */}
+              <div
+                className="absolute top-0 right-0 w-20 h-20 rounded-tr-2xl pointer-events-none"
+                style={{
+                  borderTop: "2px solid var(--accent)",
+                  borderRight: "2px solid var(--accent)",
+                  opacity: 0.25,
+                }}
+              />
+
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
+                style={{
+                  background: "rgba(122,158,159,0.1)",
+                  color: "var(--accent)",
+                }}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Our Mission
+              </div>
+
+              {/* Heading */}
+              <h3
+                className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
+                style={{ color: "var(--primary)", fontFamily: "var(--font-cormorant-garamond)" }}
+              >
+                Driven By{" "}
+                <span style={{ color: "var(--accent)" }}>Purpose</span>
+              </h3>
+
+              {/* Description */}
+              <p
+                className="text-base leading-relaxed mb-7"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                To deliver exceptional solutions that empower our clients to
+                achieve their goals. We strive to create lasting value through
+                innovation, integrity, and unwavering commitment to excellence in
+                everything we do.
+              </p>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-3">
+                <div
+                  className="rounded-xl p-4 text-center"
+                  style={{ background: "rgba(122,158,159,0.06)" }}
+                >
+                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--accent)" }}>98%</div>
+                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Satisfaction</div>
+                </div>
+                <div
+                  className="rounded-xl p-4 text-center"
+                  style={{ background: "rgba(122,158,159,0.06)" }}
+                >
+                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--accent)" }}>24/7</div>
+                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Support</div>
+                </div>
+              </div>
+
+              {/* Decorative bottom-left accent line */}
+              <div
+                className="absolute bottom-0 left-0 w-20 h-20 rounded-bl-2xl pointer-events-none"
+                style={{
+                  borderBottom: "2px solid var(--accent)",
+                  borderLeft: "2px solid var(--accent)",
+                  opacity: 0.12,
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Scroll progress scoped to this section
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 0", "end 1"],
-  });
-
-  // Smooth spring for the line
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 40,
-    restDelta: 0.001,
-  });
-
-  // pathLength="1" on the SVG means dashoffset goes 1 → 0
-  const strokeDashoffset = useTransform(smoothProgress, [0, 1], [1, 0]);
-
-  // Vision: appear when line is ~30% through
-  const visionOpacity = useTransform(smoothProgress, [0.2, 0.35], [0, 1]);
-  const visionY = useTransform(smoothProgress, [0.2, 0.35], [40, 0]);
-
-  // Mission: appear when line is ~60% through
-  const missionOpacity = useTransform(smoothProgress, [0.5, 0.65], [0, 1]);
-  const missionY = useTransform(smoothProgress, [0.5, 0.65], [40, 0]);
-
-  // A subtle soft curve – less amplitude, shorter overall
-  const curvePath =
-    "M 200 0 C 200 60, 300 100, 300 160 C 300 220, 200 260, 200 320 C 200 380, 300 420, 300 480";
 
   return (
     <section
@@ -210,203 +433,8 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* ── Timeline Section (Vision + Mission with curved line) ── */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-        {/* ── SVG Curved Path (center, desktop only) ── */}
-        <div className="hidden md:flex absolute inset-0 justify-center items-start pointer-events-none z-0">
-          <svg
-            viewBox="0 0 500 480"
-            fill="none"
-            className="w-[420px] h-auto"
-            style={{ marginTop: "20px" }}
-            preserveAspectRatio="xMidYMin meet"
-          >
-            <defs>
-              <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.9" />
-                <stop offset="50%" stopColor="var(--calm-accent)" stopOpacity="1" />
-                <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.9" />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3.5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            {/* Faded background path */}
-            <path
-              d={curvePath}
-              stroke="var(--border-subtle)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
-              opacity="0.4"
-            />
-
-            {/* Animated bright path */}
-            <motion.path
-              d={curvePath}
-              stroke="url(#lineGrad)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-              filter="url(#glow)"
-              pathLength={1}
-              style={{
-                strokeDasharray: 1,
-                strokeDashoffset: strokeDashoffset,
-              }}
-            />
-
-            {/* Small glowing dot at the leading edge */}
-            <motion.circle
-              r="5"
-              fill="var(--accent)"
-              filter="url(#glow)"
-              style={{
-                offsetPath: `path("${curvePath}")`,
-                offsetDistance: useTransform(smoothProgress, [0, 1], ["0%", "100%"]),
-              }}
-            />
-          </svg>
-        </div>
-
-        {/* ── Mobile vertical line ── */}
-        <div className="md:hidden absolute left-6 top-0 bottom-0 w-[2px]">
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{ background: "var(--border-subtle)", opacity: 0.35 }}
-          />
-          <motion.div
-            className="absolute top-0 left-0 w-full rounded-full"
-            style={{
-              background: "var(--accent)",
-              height: useTransform(smoothProgress, [0, 1], ["0%", "100%"]),
-              boxShadow: "0 0 10px rgba(122,158,159,0.6)",
-            }}
-          />
-        </div>
-
-        {/* ── Vision & Mission Content ── */}
-        <div className="relative z-10">
-          <div className="grid md:grid-cols-12 gap-6 md:gap-8 items-start">
-
-            {/* LEFT – Our Vision (pushed to far left) */}
-            <motion.div
-              className="pl-10 md:pl-0 md:col-span-4 md:text-right"
-              style={{ opacity: visionOpacity, y: visionY }}
-            >
-              {/* Mobile dot */}
-              <div
-                className="md:hidden absolute left-[18px] w-[14px] h-[14px] rounded-full border-[2.5px]"
-                style={{
-                  borderColor: "var(--calm-accent)",
-                  background: "var(--background)",
-                  transform: "translateY(4px)",
-                }}
-              />
-              <div
-                className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
-                style={{
-                  background: "rgba(106,142,143,0.1)",
-                  color: "var(--calm-accent)",
-                }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                Our Vision
-              </div>
-              <h3
-                className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
-                style={{ color: "var(--primary)" }}
-              >
-                Shaping The <span style={{ color: "var(--calm-accent)" }}>Future</span>
-              </h3>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                To be recognized as a global leader in our field, setting industry
-                standards and inspiring positive change. We envision a future where
-                our innovative solutions make a meaningful difference in the lives
-                of people worldwide.
-              </p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-3 mt-7">
-                <div
-                  className="rounded-xl p-4 text-center md:text-right"
-                  style={{ background: "rgba(106,142,143,0.06)" }}
-                >
-                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--calm-accent)" }}>10+</div>
-                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Years</div>
-                </div>
-                <div
-                  className="rounded-xl p-4 text-center md:text-right"
-                  style={{ background: "rgba(106,142,143,0.06)" }}
-                >
-                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--calm-accent)" }}>500+</div>
-                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Projects</div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Center spacer (line area) */}
-            <div className="hidden md:block md:col-span-4" />
-
-            {/* RIGHT – Our Mission (pushed to far right, shifted down) */}
-            <motion.div
-              className="pl-10 md:pl-0 md:col-span-4 md:mt-44"
-              style={{ opacity: missionOpacity, y: missionY }}
-            >
-              <div
-                className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase"
-                style={{
-                  background: "rgba(122,158,159,0.1)",
-                  color: "var(--accent)",
-                }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Our Mission
-              </div>
-              <h3
-                className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
-                style={{ color: "var(--primary)" }}
-              >
-                Driven By <span style={{ color: "var(--accent)" }}>Purpose</span>
-              </h3>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                To deliver exceptional solutions that empower our clients to
-                achieve their goals. We strive to create lasting value through
-                innovation, integrity, and unwavering commitment to excellence in
-                everything we do.
-              </p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-3 mt-7">
-                <div
-                  className="rounded-xl p-4 text-center md:text-left"
-                  style={{ background: "rgba(122,158,159,0.06)" }}
-                >
-                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--accent)" }}>98%</div>
-                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Satisfaction</div>
-                </div>
-                <div
-                  className="rounded-xl p-4 text-center md:text-left"
-                  style={{ background: "rgba(122,158,159,0.06)" }}
-                >
-                  <div className="text-2xl font-bold mb-0.5" style={{ color: "var(--accent)" }}>24/7</div>
-                  <div className="text-[11px] font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Support</div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
+      {/* ── Vision & Mission — Stacked Cards that split on scroll ── */}
+      <VisionMissionCards />
 
       {/* ── Core Values ── */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mt-28 md:mt-36">

@@ -312,6 +312,7 @@ export default function TeamSection() {
                   onMouseEnter={() => setHoverPrev(true)}
                   onMouseLeave={() => setHoverPrev(false)}
                   aria-label="Previous Team Member"
+                  suppressHydrationWarning
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -326,6 +327,7 @@ export default function TeamSection() {
                   onMouseEnter={() => setHoverNext(true)}
                   onMouseLeave={() => setHoverNext(false)}
                   aria-label="Next Team Member"
+                  suppressHydrationWarning
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7" />
